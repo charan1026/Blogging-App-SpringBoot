@@ -1,0 +1,81 @@
+/* ======================================================
+   POST PAGES (CREATE / EDIT / VIEW)
+====================================================== */
+
+/* Container for post forms */
+.post-container {
+    max-width: 760px;
+    margin: 40px auto;
+}
+
+/* Post form spacing */
+.post-container form {
+    padding: 32px;
+}
+
+/* Post title */
+.post-title {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+/* Textarea for post content */
+.post-container textarea {
+    min-height: 180px;
+    resize: vertical;
+}
+
+/* Back link */
+.back-link {
+    text-align: center;
+    margin-top: 24px;
+}
+
+.back-link a {
+    color: #2563eb;
+    font-weight: 500;
+}
+
+.back-link a:hover {
+    text-decoration: underline;
+}
+
+/* ======================================================
+   VIEW POST PAGE
+====================================================== */
+
+.post-view {
+    max-width: 820px;
+    margin: 40px auto;
+}
+
+.post-view h2 {
+    margin-bottom: 10px;
+}
+
+.post-meta {
+    color: #6b7280;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.post-content {
+    line-height: 1.8;
+    margin-bottom: 30px;
+}
+
+/* ======================================================
+   COMMENTS IN POST VIEW
+====================================================== */
+
+.comment {
+    background: #f9fafb;
+    padding: 16px;
+    border-radius: 10px;
+    margin-bottom: 14px;
+    border-left: 4px solid #2563eb;
+}
+
+.comment strong {
+    color: #2563eb;
+}

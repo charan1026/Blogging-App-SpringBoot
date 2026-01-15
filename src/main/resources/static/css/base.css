@@ -1,0 +1,167 @@
+/* ======================================================
+   GLOBAL RESET & BASE
+====================================================== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Roboto, Arial, sans-serif;
+    background: #f4f6f9;
+    color: #2c2c2c;
+    line-height: 1.6;
+}
+
+/* ======================================================
+   LAYOUT
+====================================================== */
+.container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 0 16px; /* ⭐ important for breathing space */
+}
+
+.mt-4 {
+    margin-top: 2rem;
+}
+
+/* ======================================================
+   NAVBAR
+====================================================== */
+.navbar {
+    background: linear-gradient(135deg, #1f2933, #111827);
+    padding: 16px 32px;
+    border-radius: 12px;
+    margin-top: 16px;
+    margin-bottom: 32px; /* ⭐ spacing fix */
+}
+
+/* ======================================================
+   HEADINGS
+====================================================== */
+h1, h2, h3, h4, h5 {
+    font-weight: 600;
+    color: #111827;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+/* ======================================================
+   CARDS (POSTS, FORMS, COMMENTS)
+====================================================== */
+.card {
+    background: #ffffff;
+    border-radius: 14px;
+    border: none;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    margin-bottom: 25px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
+}
+
+.card-body {
+    padding: 22px;
+}
+
+/* ======================================================
+   LINKS
+====================================================== */
+a {
+    text-decoration: none;
+    color: #2563eb;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* ======================================================
+   FORMS
+====================================================== */
+form {
+    background: #ffffff;
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+label {
+    font-weight: 500;
+    margin-top: 10px;
+    display: block;
+}
+
+input, textarea, select {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    font-size: 14px;
+}
+
+input:focus,
+textarea:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+}
+
+/* ======================================================
+   BUTTONS
+====================================================== */
+button,
+.btn {
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+/* ======================================================
+   SEARCH BOX
+====================================================== */
+.search-box {
+    background: #ffffff;
+    padding: 22px;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* ======================================================
+   COMMENTS
+====================================================== */
+.comment-box {
+    background: #f9fafb;
+    border-left: 4px solid #2563eb;
+    padding: 14px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+/* ======================================================
+   FOOTER
+====================================================== */
+.footer {
+    background: #111827;
+    color: #e5e7eb;
+    padding: 18px;
+    border-radius: 10px;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.footer a {
+    color: #fbbf24;
+    font-weight: 500;
+}

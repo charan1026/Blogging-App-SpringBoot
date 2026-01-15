@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Post</title>
+
+    <!-- CKEditor 5 CDN -->
+    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+
+	<style>
+	    /* ---------- Global Dark Theme ---------- */
+	    body {
+	        background: linear-gradient(135deg, #181a1f, #20242b, #1b1e24);
+	        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+	        color: #e4e6eb;
+	        margin: 0;
+	        padding: 40px;
+	        min-height: 100vh;
+	    }
+
+	    /* ---------- Page Title ---------- */
+	    h2 {
+	        text-align: center;
+	        font-weight: 600;
+	        margin-bottom: 30px;
+	        color: #f5f6f7;
+	        letter-spacing: 0.5px;
+	    }
+
+	    /* ---------- Form Card ---------- */
+	    form {
+	        background: linear-gradient(180deg, #22262d, #1d2026);
+	        padding: 35px;
+	        border-radius: 18px;
+	        box-shadow: 0 16px 45px rgba(0, 0, 0, 0.65);
+	        width: 700px;
+	        margin: auto;
+	    }
+
+	    /* ---------- Labels ---------- */
+	    label {
+	        display: block;
+	        margin-top: 18px;
+	        margin-bottom: 6px;
+	        font-weight: 500;
+	        color: #cfd3da;
+	    }
+
+	    /* ---------- Inputs & Textarea ---------- */
+	    input[type="text"],
+	    textarea {
+	        width: 100%;
+	        padding: 12px;
+	        border-radius: 10px;
+	        border: 1px solid #343a44;
+	        background-color: #15181d;
+	        color: #f0f2f5;
+	        box-sizing: border-box;
+	        font-size: 14px;
+	    }
+
+	    input::placeholder,
+	    textarea::placeholder {
+	        color: #9aa0aa;
+	    }
+
+	    input:focus,
+	    textarea:focus {
+	        outline: none;
+	        border-color: #5fd1c6;
+	        box-shadow: 0 0 0 1px rgba(95, 209, 198, 0.4);
+	    }
+
+	    /* ---------- Submit Button ---------- */
+	    button {
+	        margin-top: 25px;
+	        padding: 12px 26px;
+	        background-color: #5fd1c6;
+	        border: none;
+	        border-radius: 10px;
+	        font-size: 16px;
+	        font-weight: 600;
+	        color: #0f1115;
+	        cursor: pointer;
+	        transition: background-color 0.3s ease;
+	    }
+
+	    button:hover {
+	        background-color: #7fe3da;
+	    }
+
+	    /* ---------- Back Link ---------- */
+	    .back-link {
+	        text-align: center;
+	        margin-top: 25px;
+	    }
+
+	    .back-link a {
+	        color: #5fd1c6;
+	        font-weight: 500;
+	        text-decoration: none;
+	    }
+
+	    .back-link a:hover {
+	        color: #7fe3da;
+	        text-decoration: underline;
+	    }
+	</style>
+
+</head>
+<body>
+
+    <h2>Create Post</h2>
+
+    <!-- Form starts here -->
+    <form th:action="@{/create}" th:object="${post}" method="post" id="createPostForm">
+        <label for="title">Title</label>
+        <input type="text" id="title" th:field="*{title}" placeholder="Enter post title" required />
+
+        <label for="description">Short Description</label>
+        <input type="text" id="description" th:field="*{description}" placeholder="Enter post short description" required />
+
+        <label for="content">Content</label>
+        <!-- Remove required from textarea -->
+        <textarea id="content" th:field="*{content}" placeholder="Enter post content"></textarea>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <div class="back-link">
+        <a th:href="@{/dashboard}">Back to Dashboard</a>
+    </div>
+
+    <script>
+        let editorInstance;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            ClassicEditor
+                .create(document.querySelector('#content'))
+                .then(editor => {
+                    editorInstance = editor;
+                })
+                .catch(error => {
+                    console.error("CKEditor initialization failed:", error);
+                });
+
+            document.getElementById('createPostForm').addEventListener('submit', function (e) {
+                if (editorInstance) {
+                    const contentData = editorInstance.getData().trim();
+                    if (!contentData) {
+                        alert("Content is required.");
+                        e.preventDefault(); // Stop form submission
+                        return;
+                    }
+                    document.querySelector('#content').value = contentData;
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
+

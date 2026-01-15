@@ -1,0 +1,54 @@
+/* ======================================================
+   AUTH PAGES (LOGIN & REGISTER ONLY)
+====================================================== */
+
+.auth-container {
+    max-width: 420px;
+    margin: 70px auto;
+}
+
+.auth-container form {
+    padding: 32px;
+}
+
+.auth-container label {
+    font-weight: 500;
+    margin-top: 14px;
+    display: block;
+}
+
+.auth-container input[type="email"],
+.auth-container input[type="password"],
+.auth-container input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    margin-top: 6px;
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+}
+
+.auth-container button {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.auth-link {
+    text-align: center;
+    margin-top: 18px;
+}
+
+.auth-link a {
+    color: #2563eb;
+    font-weight: 500;
+}
+
+.auth-link a:hover {
+    text-decoration: underline;
+}
+
+.error {
+    color: #dc2626;
+    text-align: center;
+    margin-top: 12px;
+    font-weight: 500;
+}

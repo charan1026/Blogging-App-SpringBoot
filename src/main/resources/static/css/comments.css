@@ -1,0 +1,37 @@
+/* ======================================================
+   COMMENTS PAGE
+====================================================== */
+
+.comments-container {
+    max-width: 800px;
+    margin: 40px auto;
+}
+
+.comment-card {
+    background: #ffffff;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    border-left: 4px solid #2563eb;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: #2563eb;
+    margin-bottom: 6px;
+}
+
+.comment-text {
+    color: #374151;
+    line-height: 1.6;
+}
+
+.comment-meta {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 8px;
+}
+.comment-actions {
+    margin-top: 12px;
+}
