@@ -7,16 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import com.excelr.entity.Comment;
 import com.excelr.entity.Post;
 import com.excelr.entity.User;
-import com.excelr.repository.CommentRepository;
 import com.excelr.service.CommentService;
 import com.excelr.service.PostService;
 
@@ -24,33 +19,35 @@ import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class PostController {
-	
-	@Autowired
+
+    @Autowired
     private PostService postService;
 
     @Autowired
     private CommentService commentService;
-    
-    @Autowired
-    private HttpSession session;
-    
-    @Autowired
-    private CommentRepository commentRepository;
 
     @GetMapping("/")
     public String index(Model model) {
         model.addAttribute("posts", postService.getAllPosts());
         return "index";
     }
+    
+    @GetMapping("/posts")
+    public String allPosts(Model model) {
+        model.addAttribute("posts", postService.getAllPosts());
+        return "index";
+    }
+
 
     @GetMapping("/dashboard")
     public String dashboard(HttpSession session, Model model) {
         User user = (User) session.getAttribute("user");
-        if (user != null) {
-            model.addAttribute("posts", postService.getPostsByUserId(user.getId()));
-            return "dashboard";
+        if (user == null) {
+            return "redirect:/login";
         }
-        return "redirect:/login";
+
+        model.addAttribute("posts", postService.getPostsByUserId(user.getId()));
+        return "dashboard";
     }
 
     @GetMapping("/create")
@@ -60,36 +57,38 @@ public class PostController {
     }
 
     @PostMapping("/create")
-    public String createPost(@Validated @ModelAttribute Post post, HttpSession session, BindingResult bindingResult, Model model) {
+    public String createPost(
+            @Validated @ModelAttribute Post post,
+            BindingResult bindingResult,
+            HttpSession session) {
+
         if (bindingResult.hasErrors()) {
-            model.addAttribute("errorMessage", "Please correct the errors below.");
             return "create_post";
         }
-
-        //  FIX: Set the logged-in user to the post
-        User user = (User) session.getAttribute("user");
-        if (user == null) return "redirect:/login";
-        post.setUser(user);
-
-        postService.createPost(post);
-        
-        
-
-        return "redirect:/dashboard";
-    }
-
-
-
-    @GetMapping("/view/{id}")
-    public String viewPost(@PathVariable Integer id, Model model) {
-        Post post = postService.getPostById(id);
 
         User user = (User) session.getAttribute("user");
         if (user == null) {
             return "redirect:/login";
         }
 
-        List<Comment> comments = commentService.getCommentsByPostId(id); // Fix here
+        post.setUser(user);
+        postService.createPost(post);
+
+        return "redirect:/dashboard";
+    }
+
+    @GetMapping("/view/{id}")
+    public String viewPost(@PathVariable Integer id, Model model, HttpSession session) {
+
+        Post post = postService.getPostById(id);
+        if (post == null) {
+            return "redirect:/";
+        }
+
+        User user = (User) session.getAttribute("user");
+
+        List<Comment> comments = commentService.getCommentsByPostId(id);
+
         model.addAttribute("post", post);
         model.addAttribute("comments", comments);
         model.addAttribute("user", user);
@@ -98,110 +97,116 @@ public class PostController {
         return "view_post";
     }
 
-
     @PostMapping("/comment/{postId}")
-    public String addComment(@PathVariable Integer postId, @ModelAttribute Comment comment) {
-    	User currentUser = (User) session.getAttribute("user");
+    public String addComment(
+            @PathVariable Integer postId,
+            @ModelAttribute Comment comment,
+            HttpSession session) {
 
-        // Get the post by ID
-        Post post = postService.getPostById(postId);
-
-        // Check if the current user is the author of the post
-        if (currentUser != null && currentUser.getId().equals(post.getUser().getId())) {
-            // If the user is the author of the post, don't allow commenting
-            return "redirect:/view/" + postId + "?error=cannot_comment_on_own_post";
+        User currentUser = (User) session.getAttribute("user");
+        if (currentUser == null) {
+            return "redirect:/login";
         }
 
-        // Otherwise, proceed with commenting
+        Post post = postService.getPostById(postId);
+        if (post == null) {
+            return "redirect:/";
+        }
+
+        if (post.getUser().getId().equals(currentUser.getId())) {
+            return "redirect:/view/" + postId;
+        }
+
         comment.setPost(post);
+        comment.setUser(currentUser);
+
         commentService.addComment(comment);
+
         return "redirect:/view/" + postId;
     }
-    
+
     @GetMapping("/search")
     public String searchPosts(@RequestParam("query") String query, Model model) {
-        List<Post> posts = postService.searchPosts(query);  // You will need to implement searchPosts method in your PostService
-        model.addAttribute("posts", posts);
-        model.addAttribute("query", query);  // Passing the query back to the view
-        return "index";  // Returning to the index view
+        model.addAttribute("posts", postService.searchPosts(query));
+        model.addAttribute("query", query);
+        return "index";
     }
-    
+
     @GetMapping("/edit/{id}")
-    public String editPost(@PathVariable Integer id, Model model) {
-        Post post = postService.getPostById(id);  // Retrieve the post by ID
+    public String editPost(@PathVariable Integer id, HttpSession session, Model model) {
 
         User user = (User) session.getAttribute("user");
         if (user == null) {
-            return "redirect:/login";  // Ensure the user is logged in
+            return "redirect:/login";
         }
 
-        // Check if the logged-in user is the author of the post
+        Post post = postService.getPostById(id);
         if (post == null || !post.getUser().getId().equals(user.getId())) {
-            return "redirect:/dashboard";  // Redirect to the dashboard if the post doesn't exist or if it's not the logged-in user's post
+            return "redirect:/dashboard";
         }
 
-        model.addAttribute("post", post);  // Add the post to the model for the edit form
-        return "edit_post";  // Return the "edit_post" view
+        model.addAttribute("post", post);
+        return "edit_post";
     }
 
     @PostMapping("/edit/{id}")
-    public String updatePost(@PathVariable Integer id, @ModelAttribute Post post, HttpSession session) {
-        Post existingPost = postService.getPostById(id);
+    public String updatePost(
+            @PathVariable Integer id,
+            @ModelAttribute Post post,
+            HttpSession session) {
 
         User user = (User) session.getAttribute("user");
-        if (user == null || existingPost == null || !existingPost.getUser().getId().equals(user.getId())) {
-            return "redirect:/dashboard";  // Ensure the user is logged in and authorized to edit the post
+        Post existingPost = postService.getPostById(id);
+
+        if (user == null || existingPost == null ||
+            !existingPost.getUser().getId().equals(user.getId())) {
+            return "redirect:/dashboard";
         }
 
-        // Update the post with the new data
         existingPost.setTitle(post.getTitle());
         existingPost.setDescription(post.getDescription());
         existingPost.setContent(post.getContent());
 
-        postService.createPost(existingPost);  // Save the updated post
+        postService.createPost(existingPost);
 
-        return "redirect:/dashboard";  // Redirect to the dashboard after updating
-        
+        return "redirect:/dashboard";
     }
-    
-    @GetMapping("/comments")
-    public String viewUserComments(HttpSession session, Model model) {
-        User loggedInUser = (User) session.getAttribute("user");
 
-        if (loggedInUser == null) {
+    @GetMapping("/delete/{id}")
+    public String deletePost(@PathVariable Integer id, HttpSession session) {
+
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
             return "redirect:/login";
         }
 
-        List<Comment> comments = commentRepository.findCommentsByPostId(loggedInUser.getId());
+        Post post = postService.getPostById(id);
+
+        if (post == null) {
+            return "redirect:/dashboard";
+        }
+
+        if (!post.getUser().getId().equals(user.getId())) {
+            return "redirect:/dashboard";
+        }
+
+        postService.deletePost(id);
+
+        return "redirect:/dashboard";
+    }
+    
+    @GetMapping("/comments")
+    public String myComments(HttpSession session, Model model) {
+
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            return "redirect:/login";
+        }
+
+        List<Comment> comments = commentService.getCommentsByUserId(user.getId());
         model.addAttribute("comments", comments);
 
-        return "comments"; // Thymeleaf template name
-    }
-    
-    
-
-    @GetMapping("/posts/new")
-    public String showNewPostForm(Model model) {
-        model.addAttribute("post", new Post());
-        return "create_post"; // or use new_post.html if you're using a different view
-    }
-    @GetMapping("/posts")
-    public String showAllPosts(HttpSession session, Model model) {
-        List<Post> posts = postService.getAllPosts();
-        User currentUser = (User) session.getAttribute("user");
-
-        model.addAttribute("posts", posts);
-        model.addAttribute("user", currentUser); //  Add current user to model
-        return "index";  // or your posts listing view
-    }
-
-
-
-
-    @GetMapping("/delete/{id}")
-    public String deletePost(@PathVariable Integer id) {
-        postService.deletePost(id);
-        return "redirect:/dashboard";
+        return "comments";
     }
 
 }

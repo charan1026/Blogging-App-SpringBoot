@@ -3,21 +3,21 @@ package com.excelr.service;
 import java.util.List;
 
 import com.excelr.entity.Post;
+import com.excelr.entity.User;
 
 public interface PostService {
 	
-	public Post createPost(Post post);
+    Post createPost(Post post);
 	
-    public List<Post> getAllPosts();
+    List<Post> getAllPosts();
     
-    public List<Post> getPostsByUserId(Integer userId);
+    List<Post> getPostsByUserId(Integer userId);
     
-    public Post getPostById(Integer id);
+    Post getPostById(Integer id);
     
-    public void deletePost(Integer id);
+    void deletePost(Integer id);
 
-	public List<Post> searchPosts(String query);
+    List<Post> searchPosts(String query);
 
-
-
+    long countPostsByUser(User user);
 }

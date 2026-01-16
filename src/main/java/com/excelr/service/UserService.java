@@ -3,12 +3,15 @@ package com.excelr.service;
 import com.excelr.entity.User;
 
 public interface UserService {
-	
-	
-    public User registerUser(User user);
-	
-    public User loginUser(String email, String pwd);
+
+    User registerUser(User user);
+
+    User loginUser(String email, String pwd);
+
+    boolean isEmailAlreadyRegistered(String email);
+
     
-    public boolean isEmailAlreadyRegistered(String email);  // New method
-    
+    void updateProfileImage(Integer userId, String imageFileName);
+
+    User getUserById(Integer userId);
 }

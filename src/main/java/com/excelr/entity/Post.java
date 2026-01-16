@@ -1,15 +1,11 @@
 package com.excelr.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
 import java.time.LocalDate;
 import java.util.List;
 
 @Entity
 @Table(name = "POST_TBL")
-//@Getter
-//@Setter
 public class Post {
 
     @Id
@@ -24,15 +20,18 @@ public class Post {
     private String content;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @OneToMany(
+        mappedBy = "post",
+        cascade = CascadeType.ALL,
+        orphanRemoval = true
+    )
     private List<Comment> comments;
 
     private LocalDate createdOn;
 
-    // ===== GETTERS & SETTERS =====
 
     public Integer getId() {
         return id;

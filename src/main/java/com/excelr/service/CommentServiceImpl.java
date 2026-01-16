@@ -16,29 +16,24 @@ public class CommentServiceImpl implements CommentService {
     @Autowired
     private CommentRepository commentRepository;
 
-    @Autowired
-    private PostRepository postRepository;
-
-    // 1. Save new comment
     @Override
     public Comment addComment(Comment comment) {
 
-       
-        return commentRepository.save(comment); 
-    }
-    
-    public List<Comment> getAllComments() {
-        return commentRepository.findAll();
+        if (comment.getUser() == null || comment.getPost() == null) {
+            throw new RuntimeException("Comment must have user and post");
+        }
+
+        // createdOn is auto-set by @PrePersist
+        return commentRepository.save(comment);
     }
 
-
-    // 2. Get comments by postId
     @Override
     public List<Comment> getCommentsByPostId(Integer postId) {
+        return commentRepository.findByPostId(postId);
+    }
 
-        Post post = postRepository.findById(postId)
-                .orElseThrow(() -> new RuntimeException("Post Not Found"));
-
-        return commentRepository.findByPost(post);
+    @Override
+    public List<Comment> getCommentsByUserId(Integer userId) {
+        return commentRepository.findByUserId(userId);
     }
 }

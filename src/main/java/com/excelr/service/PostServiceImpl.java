@@ -6,49 +6,47 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.excelr.entity.Post;
+import com.excelr.entity.User;
 import com.excelr.repository.PostRepository;
 
 @Service
 public class PostServiceImpl implements PostService {
-	
-	@Autowired
-	private PostRepository postRepository;
 
-	@Override
-	public Post createPost(Post post) {
-	    // Save the post to the database and return it
-	    return postRepository.save(post);
-	}
+    @Autowired
+    private PostRepository postRepository;
 
+    @Override
+    public Post createPost(Post post) {
+        return postRepository.save(post);
+    }
 
-	@Override
-	public List<Post> getAllPosts() {
-		
-		return postRepository.findAll();
-	}
+    @Override
+    public List<Post> getAllPosts() {
+        return postRepository.findAll();
+    }
 
-	@Override
-	public List<Post> getPostsByUserId(Integer userId) {
-		
-		 return postRepository.findByUserId(userId);
-	}
+    @Override
+    public List<Post> getPostsByUserId(Integer userId) {
+        return postRepository.findByUserId(userId);
+    }
 
-	@Override
-	public Post getPostById(Integer id) {
-		
-		return postRepository.findById(id).orElse(null);
+    @Override
+    public Post getPostById(Integer id) {
+        return postRepository.findById(id).orElse(null);
+    }
 
-	}
+    @Override
+    public void deletePost(Integer id) {
+        postRepository.deleteById(id);
+    }
 
-	@Override
-	public void deletePost(Integer id) {
-		
-		 postRepository.deleteById(id);
+    @Override
+    public List<Post> searchPosts(String query) {
+        return postRepository.findByTitleContainingOrContentContaining(query, query);
+    }
 
-	}
-	
-	public List<Post> searchPosts(String query) {
-	    return postRepository.findByTitleContainingOrContentContaining(query, query);
-	}
-
+    @Override
+    public long countPostsByUser(User user) {
+        return postRepository.countByUser(user); // ✅ FIXED
+    }
 }

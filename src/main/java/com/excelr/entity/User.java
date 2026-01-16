@@ -5,15 +5,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.Setter;
-
-
 
 @Entity
 @Table(name = "USER_TBL")
-//@Getter
-//@Setter
 public class User {
 
     @Id
@@ -24,6 +18,9 @@ public class User {
     private String lname;
     private String email;
     private String pwd;
+
+    private String profileImage;
+
 
     public Integer getId() {
         return id;
@@ -63,5 +60,13 @@ public class User {
 
     public void setPwd(String pwd) {
         this.pwd = pwd;
+    }
+
+    public String getProfileImage() {
+        return profileImage;
+    }
+
+    public void setProfileImage(String profileImage) {
+        this.profileImage = profileImage;
     }
 }

@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Login</title>
 	<style>
-	    /* ---------- Global Dark Theme ---------- */
 	    body {
 	        background: linear-gradient(135deg, #181a1f, #20242b, #1b1e24);
 	        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -13,7 +12,6 @@
 	        min-height: 100vh;
 	    }
 
-	    /* ---------- Page Title ---------- */
 	    h2 {
 	        text-align: center;
 	        margin-top: 60px;
@@ -23,7 +21,6 @@
 	        letter-spacing: 0.5px;
 	    }
 
-	    /* ---------- Login Card ---------- */
 	    form {
 	        background: linear-gradient(180deg, #22262d, #1d2026);
 	        padding: 30px;
@@ -33,7 +30,6 @@
 	        margin: 0 auto;
 	    }
 
-	    /* ---------- Labels ---------- */
 	    label {
 	        display: block;
 	        margin-top: 18px;
@@ -42,7 +38,6 @@
 	        color: #cfd3da;
 	    }
 
-	    /* ---------- Inputs ---------- */
 	    input[type="email"],
 	    input[type="password"] {
 	        width: 100%;
@@ -65,7 +60,6 @@
 	        box-shadow: 0 0 0 1px rgba(95, 209, 198, 0.4);
 	    }
 
-	    /* ---------- Login Button ---------- */
 	    button {
 	        margin-top: 25px;
 	        width: 100%;
@@ -84,7 +78,6 @@
 	        background-color: #7fe3da;
 	    }
 
-	    /* ---------- Error Message ---------- */
 	    .error {
 	        text-align: center;
 	        margin-top: 15px;
@@ -92,7 +85,6 @@
 	        font-weight: 500;
 	    }
 
-	    /* ---------- Register Link ---------- */
 	    .link {
 	        text-align: center;
 	        margin-top: 25px;
@@ -115,7 +107,6 @@
 <body>
 
    
-    <!-- Login Form -->
     <h2>Login</h2>
 
     <form th:action="@{/login}" method="post">
@@ -130,10 +121,8 @@
         </div>
     </form>
 
-    <!-- Error message -->
     <p class="error" th:if="${error}" th:text="${error}"></p>
 
-    <!-- Register link -->
     <div class="link">
         <p>Don't have an account? <a th:href="@{/register}">Register here</a></p>
     </div>
